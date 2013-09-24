@@ -11,13 +11,14 @@ var Board = function( selector ) {
     $elem.on('click', function(e){
       var left = e.offsetX
       var top = e.offsetY
-      renderPostIt($elem, top, left);
-      makeNotesDraggable();
-      makeNotesEditable();
+      makeNote($elem, top, left);
+      makeNoteDraggable();
+      makeNoteEditable();
+      makeNoteClosable();
     })
   };
 
-  function renderPostIt(elem, top, left){
+  function makeNote(elem, top, left){
     var newPostIt = new PostIt();
     elem.append(newPostIt.object);
     var allNotes = document.getElementsByClassName('post-it')
@@ -28,11 +29,11 @@ var Board = function( selector ) {
     });
   };
 
-  function makeNotesDraggable(){
+  function makeNoteDraggable(){
     $('.post-it').draggable({handle: ".header"});
   };
 
-  function makeNotesEditable(){
+  function makeNoteEditable(){
     $( ".post-it" ).on('click', function( event ) {
       event.stopPropagation();
     })
@@ -43,6 +44,13 @@ var Board = function( selector ) {
 
   };
 
+  function makeNoteClosable(){
+    $('.exit').on('click', function( event ){
+      event.stopPropagation();
+      $(this).closest('.post-it').remove();
+    })
+  };
+
   initialize();
 };
 
@@ -50,7 +58,7 @@ var Board = function( selector ) {
 var PostIt = function() {
   // Your post-it related code goes here
   var post_it_stuff = " class=\"post-it\">"
-  var header_stuff = " class=\"header\">"
+  var header_stuff = " class=\"header\"><span class=\"exit\">X</span>"
   var content_stuff = " class=\"content\">"
 
   this.object = 
@@ -66,12 +74,5 @@ $(function() {
   // Board.new('#board'); // original code...  
   new Board('#board');
 });
-
-
-// problems: 
-
-// we have no exit-button 
-
-
 
 
