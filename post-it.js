@@ -8,16 +8,24 @@ var Board = function( selector ) {
     // Need to listen to the selector element for our board for clicks
     // Need to append to that element a post it on click
 
-    $elem.on('click', function(){
-      renderPostIt($elem);
+    $elem.on('click', function(e){
+      var left = e.offsetX
+      var top = e.offsetY
+      renderPostIt($elem, top, left);
       makeNotesDraggable();
       makeNotesEditable();
     })
   };
 
-  function renderPostIt(elem){
+  function renderPostIt(elem, top, left){
     var newPostIt = new PostIt();
     elem.append(newPostIt.object);
+    var allNotes = document.getElementsByClassName('post-it')
+    var newDomElement = allNotes[allNotes.length-1];
+    $( newDomElement ).css({
+      "top" : top, 
+      "left": left
+    });
   };
 
   function makeNotesDraggable(){
@@ -30,7 +38,6 @@ var Board = function( selector ) {
     })
 
     $( ".post-it .content" ).on('click', function() {
-      // alert('hi')
       $(this).attr("contenteditable", "true")
     })
 
@@ -63,15 +70,7 @@ $(function() {
 
 // problems: 
 
-// draggable is making it so we can only right-click
-// but we want to be able to left-click and enter the element.
-
-// we want to be able to drag the header alone, but that doesn't carry 
-// the content along with the header: just hte header alone
-
 // we have no exit-button 
-
-// we don't append the new post its to where we click (goes to the top left corner)
 
 
 
